@@ -1,0 +1,785 @@
+:root {
+  --color-bg: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-text: #1a1a1a;
+  --color-muted: #6b7280;
+  --color-border: #d8dce1;
+  --color-primary: #2563eb;
+  --color-primary-text: #ffffff;
+  --color-error: #b91c1c;
+  --color-error-bg: #fef2f2;
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+#header .banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.app-title {
+  font-weight: 700;
+}
+
+.session-id {
+  font-weight: 700;
+  padding: 0.15rem 0.6rem;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  border-radius: 999px;
+}
+
+.course-repo {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.header-nav a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.header-nav a:hover {
+  text-decoration: underline;
+}
+
+.signed-in-as {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.back-link {
+  background: none;
+  color: var(--color-primary);
+  border: none;
+  padding: 0;
+  align-self: flex-start;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+#app {
+  max-width: 720px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Data-table views (Roster) need more horizontal room than the simple
+   forms the base width is tuned for. */
+#app.wide {
+  max-width: 1100px;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+label {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.field-hint {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+input,
+select,
+button {
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+}
+
+button {
+  cursor: pointer;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  border: none;
+  align-self: flex-start;
+  white-space: nowrap;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.prefixed-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.prefixed-input span {
+  padding: 0.5rem;
+  background: var(--color-bg);
+  color: var(--color-muted);
+}
+
+.prefixed-input input {
+  border: none;
+  flex: 1;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 1rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.actions a {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  text-decoration: none;
+  align-self: flex-start;
+  white-space: nowrap;
+}
+
+.error {
+  color: var(--color-error);
+  background: var(--color-error-bg);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.roster-table-wrap {
+  overflow-x: auto;
+}
+
+.roster-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.roster-table th,
+.roster-table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.roster-table input.cell {
+  width: 100%;
+  min-width: 8rem;
+}
+
+.roster-table input.cell.invalid {
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
+}
+
+.roster-table tr.dirty td {
+  background: var(--color-bg);
+}
+
+.roster-table tr.removed td {
+  color: var(--color-muted);
+}
+
+.roster-table .register-btn {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  margin-right: 0.4rem;
+}
+
+.badge-active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-pending {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.badge-none {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+/* Participation: Record + History views */
+
+.participation-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.participation-tabs .active {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.category-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.category-toggle button {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.category-toggle button.active {
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  border-color: var(--color-primary);
+}
+
+.record-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.record-controls label {
+  margin: 0;
+}
+
+.record-controls input {
+  width: auto;
+}
+
+.participation-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.participation-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
+
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.student-name {
+  font-weight: 600;
+}
+
+.student-id {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+.score-buttons {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.score-btn {
+  min-width: 2.25rem;
+  text-align: center;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.score-btn.selected {
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  border-color: var(--color-primary);
+}
+
+.score-btn-absent {
+  color: var(--color-muted);
+  border-style: dashed;
+}
+
+.score-btn-absent.selected {
+  background: var(--color-muted);
+  color: var(--color-primary-text);
+  border-color: var(--color-muted);
+  border-style: solid;
+}
+
+.row-status {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.row-status.saved {
+  color: #166534;
+}
+
+.participation-table-wrap {
+  overflow-x: auto;
+}
+
+.participation-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.participation-table th,
+.participation-table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.participation-table input.cell,
+.participation-table select.cell {
+  width: 100%;
+  min-width: 5rem;
+}
+
+.participation-table tr.removed td {
+  color: var(--color-muted);
+}
+
+.participation-table td.total-col {
+  font-weight: 700;
+}
+
+.audit-student-group {
+  margin-bottom: 1.5rem;
+}
+
+.audit-student-heading {
+  margin: 0 0 0.4rem;
+}
+
+.pill {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.pill-theory {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.pill-lab {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.diff-old {
+  color: var(--color-muted);
+  text-decoration: line-through;
+}
+
+.diff-created {
+  color: var(--color-muted);
+}
+
+.diff-arrow {
+  color: var(--color-muted);
+}
+
+.timestamp-note {
+  display: block;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  margin-bottom: 0.2rem;
+}
+
+.clear-btn,
+.undo-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+/* Random student picker */
+
+.picker-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.picker-list-col {
+  flex: 1;
+  min-width: 200px;
+}
+
+.picker-list {
+  padding-left: 1.5rem;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.picker-draw-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  min-width: 280px;
+  padding: 2rem 1.5rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.picker-number {
+  font-size: 6rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 5rem;
+  text-align: center;
+  padding: 0.75rem 1.5rem;
+  border: 3px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.picker-number.is-spinning {
+  animation: picker-tick-pulse 0.25s ease-in-out infinite;
+}
+
+.picker-number.is-landed {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgb(37 99 235 / 15%);
+  animation: picker-settle 0.4s ease-out;
+}
+
+.picker-winner {
+  font-size: 2rem;
+  font-weight: 700;
+  min-height: 1.4em;
+  text-align: center;
+}
+
+.picker-winner.is-revealed {
+  animation: picker-reveal 0.5s ease-out;
+}
+
+.picker-draw-col #picker-draw {
+  font-size: 1.1rem;
+  padding: 0.65rem 1.75rem;
+}
+
+@keyframes picker-tick-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes picker-settle {
+  0% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes picker-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(0.5rem);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Student Photos */
+
+.photo-pairing {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.photo-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+  gap: 0.5rem;
+}
+
+.photo-tile {
+  position: relative;
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.25rem;
+  cursor: pointer;
+  background: none;
+  text-align: center;
+}
+
+.photo-tile.selected {
+  border-color: var(--color-primary);
+}
+
+.photo-tile img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+.photo-tile-name {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--color-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.photo-tile-discard {
+  position: absolute;
+  top: 0.15rem;
+  right: 0.15rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  line-height: 1;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.student-pick-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.student-pick-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-align: left;
+  width: 100%;
+}
+
+.student-pick-row.selected {
+  border-color: var(--color-primary);
+}
+
+.student-pick-row.has-photo {
+  opacity: 0.75;
+}
+
+.pending-pairs {
+  margin-top: 1rem;
+}
+
+.pending-pair-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pending-pair-thumb {
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: 0.75rem;
+}
+
+.gallery-tile {
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.gallery-tile img,
+.gallery-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+.gallery-placeholder {
+  background: var(--color-bg);
+  border: 1px dashed var(--color-border);
+  color: var(--color-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+.gallery-photo-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.gallery-photo-btn:hover img {
+  opacity: 0.85;
+}
+
+.photo-lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 10;
+}
+
+.photo-lightbox {
+  position: relative;
+  background: var(--color-surface);
+  border-radius: 8px;
+  padding: 1.5rem 1rem 1rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.photo-lightbox img {
+  max-width: 100%;
+  max-height: 70vh;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.photo-lightbox-caption {
+  font-weight: 600;
+  margin: 0;
+}
+
+.photo-lightbox-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  line-height: 1;
+  border-radius: 999px;
+  font-size: 1.1rem;
+}

@@ -1,0 +1,54 @@
+name: Deploy course app to Pages
+
+on:
+  push:
+    branches: [main]
+    # Only the app shell should ever trigger a (re)deploy. Grade/roster/
+    # config saves are Contents-API commits too, but they never touch these
+    # paths, so routine data changes don't burn Actions minutes re-running
+    # a deploy that would publish nothing new.
+    paths:
+      - "index.html"
+      - "assets/**"
+      - ".github/workflows/deploy-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage the app shell only
+        run: |
+          mkdir _site
+          cp index.html _site/
+          cp -r assets _site/
+
+      - uses: actions/configure-pages@v5
+        with:
+          # Without this, configure-pages only reads existing Pages config
+          # and fails if the site has never been enabled — which is always
+          # true on a course repo's very first deploy. This makes the
+          # workflow enable it itself instead of requiring a manual
+          # Settings -> Pages step per course repo.
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
