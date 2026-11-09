@@ -1,0 +1,13 @@
+{
+  "sessionId": "",
+  "org": "",
+  "repoName": "",
+  "createdAt": "",
+  "participation": {
+    "theory": { "max": 2 },
+    "lab": { "max": 2 },
+    "drawSpacingWeeks": 12
+  },
+  "writtenActivity": { "max": 6 },
+  "bonus": { "max": 3 }
+}
